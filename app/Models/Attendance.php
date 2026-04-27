@@ -3,6 +3,9 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Models\User;
+use App\Models\RestTime;
+use App\Models\StampCorrectionRequest;
 
 class Attendance extends Model
 {
@@ -12,6 +15,7 @@ class Attendance extends Model
         'check_in',
         'check_out',
         'status',
+        'remarks',
     ];
 
     public function user()
@@ -22,5 +26,11 @@ class Attendance extends Model
     public function restTimes()
     {
         return $this->hasMany(RestTime::class);
+    }
+
+    public function stampCorrectionRequest()
+    {
+        return $this->hasOne
+        (StampCorrectionRequest::class);
     }
 }

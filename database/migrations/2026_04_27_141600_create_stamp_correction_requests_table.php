@@ -11,13 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('attendances', function (Blueprint $table) {
+        Schema::create('stamp_correction_requests', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained();
-            $table->date('date');
-            $table->time('check_in');
-            $table->time('check_out')->nullable();
-            $table->string('status');
+            $table->foreignId('attendance_id')->constrained();
+            $table->string('status')->default('承認待ち');
+            $table->string('remarks')->nullable();
             $table->timestamps();
         });
     }
@@ -27,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('attendances');
+        Schema::dropIfExists('stamp_correction_requests');
     }
 };
