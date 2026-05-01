@@ -28,9 +28,11 @@ class StampCorrectionRequestController extends Controller
         return redirect()->route('stamp-correction-requests.index');
     }
 
-    public function index()
+    public function index(Request $request)
     {
         $user=Auth::user();
+
+        $tab=$request->input('tab','pending');
 
         $pendingRequests=StampCorrectionRequest::where('user_id',$user->id)
         ->where('status','承認待ち')
@@ -40,7 +42,7 @@ class StampCorrectionRequestController extends Controller
         ->where('status','承認済み')
         ->get();
 
-        return view('user.stamp_correction.index', compact('pendingRequests', 'approvedRequests'));
+        return view('user.stamp_correction.list', compact('pendingRequests', 'approvedRequests','tab'));
 
 
     }
