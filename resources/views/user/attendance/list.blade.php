@@ -7,13 +7,11 @@
 
         {{-- 月切り替え --}}
         <div class="month-nav">
-            <a
-                href="{{ route('attendance.list', ['month' => Carbon\Carbon::parse($month)->subMonth()->format('Y-m')]) }}">←前月</a>
-
-            <span>{{ Carbon\Carbon::parse($month)->format('Y-m') }}</span>
-
-            <a
-                href="{{ route('attendance.list', ['month' => Carbon\Carbon::parse($month)->addMonth()->format('Y-m')]) }}">次月→</a>
+            <a href="{{ route('attendance.list', ['month' => Carbon\Carbon::parse($month)->subMonth()->format('Y-m')]) }}">←
+                前月</a>
+            <span>{{ Carbon\Carbon::parse($month)->format('Y/m') }}</span>
+            <a href="{{ route('attendance.list', ['month' => Carbon\Carbon::parse($month)->addMonth()->format('Y-m')]) }}">翌月
+                →</a>
         </div>
 
         {{-- 勤怠一覧テーブル --}}
@@ -32,17 +30,38 @@
                 @foreach ($dates as $date)
                     @php
                         $attendance = $attendances->get($date->toDateString()) ?? null;
+
+                        $totalRest = 0;
+                        if ($attendance) {
+                            foreach ($attendance->restTimes as $restTime) {
+                                if ($restTime->rest_end) {
+                                    $totalRest += Carbon\Carbon::parse($restTime->rest_start)->diffInMinutes(
+                                        Carbon\Carbon::parse($restTime->rest_end),
+                                    );
+                                }
+                            }
+                        }
+                        $restHours = floor($totalRest / 60);
+                        $restMinutes = $totalRest % 60;
+
+                        $totalWork = 0;
+                        if ($attendance && $attendance->check_out) {
+                            $totalWork = Carbon\Carbon::parse($attendance->check_in)->diffInMinutes(
+                                Carbon\Carbon::parse($attendance->check_out),
+                            );
+                            $totalWork -= $totalRest;
+                        }
+                        $workHours = floor($totalWork / 60);
+                        $workMinutes = $totalWork % 60;
                     @endphp
                     <tr>
-                        <td>{{ $date->isoFormat('MM/DD(ddd)') }}</td>
-                        <td>{{ $attendance ? $attendance->check_in : '-' }}</td>
-                        <td>{{ $attendance ? $attendance->check_out : '-' }}</td>
-                        <td>
-                            {{-- 休憩時間の合計を表示 --}}
+                        <td>{{ $date->locale('ja')->isoFormat('MM/DD(ddd)') }}</td>
+                        <td>{{ $attendance && $attendance->check_in ? Carbon\Carbon::parse($attendance->check_in)->format('H:i') : '' }}
                         </td>
-                        <td>
-                            {{-- 勤務時間から休憩時間を引いた合計を表示 --}}
+                        <td>{{ $attendance && $attendance->check_out ? Carbon\Carbon::parse($attendance->check_out)->format('H:i') : '' }}
                         </td>
+                        <td>{{ $attendance ? sprintf('%02d:%02d', $restHours, $restMinutes) : '' }}</td>
+                        <td>{{ $attendance ? sprintf('%02d:%02d', $workHours, $workMinutes) : '' }}</td>
                         <td>
                             @if ($attendance)
                                 <a href="{{ route('attendance.detail', ['attendance' => $attendance->id]) }}">詳細</a>

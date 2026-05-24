@@ -13,6 +13,7 @@
             <img src="{{ asset('images/logo.png') }}" alt="ロゴ">
         </div>
         @auth
+        @if(Auth::user()->email_verified_at)
         <nav>
             <a href="{{ route('attendance.index') }}">勤怠</a>
             <a href="{{ route('attendance.list') }}">勤怠一覧</a>
@@ -22,6 +23,7 @@
                 <button type="submit">ログアウト</button>
             </form>
         </nav>
+        @endif
         @endauth
     </header>
 

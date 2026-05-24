@@ -8,7 +8,7 @@
         </div>
 
         <div class="date">
-            <p>{{ Carbon\Carbon::parse($today)->isoFormat('YYYY年M月D日(ddd)') }}</p>
+            <p>{{ Carbon\Carbon::parse($today)->locale('ja')->isoFormat('YYYY年M月D日(ddd)') }}</p>
         </div>
 
         <div class="time">
@@ -34,21 +34,21 @@
             @if ($status === '勤務外')
                 <form method="POST" action="{{ route('attendance.check-in') }}">
                     @csrf
-                    <button type="submit">出勤</button>
+                    <button type="submit" class="btn-black">出勤</button>
                 </form>
             @elseif($status === '出勤中')
                 <form method="POST" action="{{ route('attendance.check-out') }}">
                     @csrf
-                    <button type="submit">退勤</button>
+                    <button type="submit" class="btn-black">退勤</button>
                 </form>
                 <form method="POST" action="{{ route('attendance.rest-in') }}">
                     @csrf
-                    <button type="submit">休憩入</button>
+                    <button type="submit" class="btn-white">休憩入</button>
                 </form>
             @elseif($status === '休憩中')
                 <form method="POST" action="{{ route('attendance.rest-out') }}">
                     @csrf
-                    <button type="submit">休憩戻</button>
+                    <button type="submit" class="btn-white">休憩戻</button>
                 </form>
             @elseif($status === '退勤済')
                 <p>お疲れ様でした！</p>
