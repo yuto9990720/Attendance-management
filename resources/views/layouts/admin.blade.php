@@ -15,15 +15,19 @@
             <img src="{{ asset('images/logo.png') }}" alt="ロゴ">
         </div>
         @auth
-            <nav>
-                <a href="{{ route('admin.attendance.index') }}">勤怠一覧</a>
-                <a href="{{ route('admin.staff.index') }}">スタッフ一覧</a>
-                <a href="{{ route('admin.stamp-correction-requests.index') }}">申請一覧</a>
-                <form method="POST" action="{{ route('admin.logout') }}">
-                    @csrf
-                    <button type="submit">ログアウト</button>
-                </form>
-            </nav>
+            @if (Auth::user() &&
+                    Auth::user()->role === 'admin' &&
+                    request()->routeIs('admin.attendance.*', 'admin.staff.*', 'admin.stamp-correction*', 'admin.logout'))
+                <nav>
+                    <a href="{{ route('admin.attendance.index') }}">勤怠一覧</a>
+                    <a href="{{ route('admin.staff.index') }}">スタッフ一覧</a>
+                    <a href="{{ route('admin.stamp-correction-requests.index') }}">申請一覧</a>
+                    <form method="POST" action="{{ route('admin.logout') }}">
+                        @csrf
+                        <button type="submit">ログアウト</button>
+                    </form>
+                </nav>
+            @endif
         @endauth
     </header>
 

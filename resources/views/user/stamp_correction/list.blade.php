@@ -8,8 +8,10 @@
 
         {{-- タブ --}}
         <div class="tabs">
-            <a href="{{ route('stamp-correction-requests.index', ['tab' => 'pending']) }}">承認待ち</a>
-            <a href="{{ route('stamp-correction-requests.index', ['tab' => 'approved']) }}">承認済み</a>
+            <a
+                href="{{ route('stamp-correction-requests.index', ['tab' => 'pending']) }}"class="{{ !isset($tab) || $tab === 'pending' ? 'active' : '' }}">承認待ち</a>
+            <a
+                href="{{ route('stamp-correction-requests.index', ['tab' => 'approved']) }}"class="{{ $tab === 'approved' ? 'active' : '' }}">承認済み</a>
         </div>
 
         {{-- 承認待ち一覧 --}}

@@ -7,6 +7,7 @@ use App\Models\Attendance;
 use App\Models\RestTime;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use App\Http\Requests\AttendanceRequest;
 
 class AttendanceController extends Controller
 {
@@ -31,7 +32,7 @@ class AttendanceController extends Controller
         return view('admin.attendance.detail', compact('attendance'));
     }
 
-    public function update(Request $request, $attendance)
+    public function update(AttendanceRequest $request, $attendance)
     {
         $attendance = Attendance::find($attendance);
 

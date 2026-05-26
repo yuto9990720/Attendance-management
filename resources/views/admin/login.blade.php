@@ -1,32 +1,32 @@
 @extends('layouts.admin')
 
 @section('content')
-<div class="admin-login-container">
+    <div class="login-container">
 
-    <h2>管理者ログイン</h2>
+        <h2>管理者ログイン</h2>
 
-    <form method="POST" action="{{ route('admin.login.store') }}">
-        @csrf
+        <form method="POST" action="{{ route('admin.login.store') }}">
+            @csrf
 
-        <div class="form-group">
-            <label for="email">メールアドレス</label>
-            <input id="email" type="email" name="email" value="{{ old('email') }}">
-            @if($errors->has('email'))
-                <span class="error">{{ $errors->first('email') }}</span>
-            @endif
-        </div>
+            <div class="form-group">
+                <label for="email">メールアドレス</label>
+                <input id="email" type="email" name="email" value="{{ old('email') }}">
+                @if ($errors->has('email'))
+                    <span class="error">{{ $errors->first('email') }}</span>
+                @endif
+            </div>
 
-        <div class="form-group">
-            <label for="password">パスワード</label>
-            <input id="password" type="password" name="password">
-            @if($errors->has('password'))
-                <span class="error">{{ $errors->first('password') }}</span>
-            @endif
-        </div>
+            <div class="form-group">
+                <label for="password">パスワード</label>
+                <input id="password" type="password" name="password">
+                @if ($errors->has('password'))
+                    <span class="error">{{ $errors->first('password') }}</span>
+                @endif
+            </div>
 
-        <button type="submit">管理者ログインする</button>
+            <button type="submit">管理者ログインする</button>
 
-    </form>
+        </form>
 
-</div>
+    </div>
 @endsection

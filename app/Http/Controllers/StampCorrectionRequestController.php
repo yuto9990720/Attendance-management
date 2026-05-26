@@ -6,11 +6,11 @@ use Illuminate\Http\Request;
 use App\Models\Attendance;
 use App\Models\StampCorrectionRequest;
 use Illuminate\Support\Facades\Auth;
-
+use App\Http\Requests\AttendanceRequest;
 
 class StampCorrectionRequestController extends Controller
 {
-    public function store(Request $request, $attendance)
+    public function store(AttendanceRequest $request, $attendance)
     {
         $attendance=Attendance::find($attendance);
 
