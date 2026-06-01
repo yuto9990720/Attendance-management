@@ -5,11 +5,13 @@
 Dockerビルド
 
 1. リポジトリをクローン
+
 ```bash
-git clone リポジトリURL
+git clone https://github.com/yuto9990720/Attendance-management.git
 ```
 
 2. コンテナを起動
+
 ```bash
 ./vendor/bin/sail up -d --build
 ```
@@ -17,6 +19,7 @@ git clone リポジトリURL
 Laravel環境構築
 
 1. composerパッケージのインストール
+
 ```bash
 docker run --rm \
     -u "$(id -u):$(id -g)" \
@@ -27,24 +30,40 @@ docker run --rm \
 ```
 
 2. .envファイルの作成
+
 ```bash
 cp .env.example .env
 ```
 
 3. アプリケーションキーの生成
+
 ```bash
 ./vendor/bin/sail artisan key:generate
 ```
 
 4. マイグレーションの実行
+
 ```bash
 ./vendor/bin/sail artisan migrate
 ```
 
 5. シーディングの実行
+
 ```bash
 ./vendor/bin/sail artisan db:seed
 ```
+
+## テスト用アカウント
+
+### 管理者
+
+- メールアドレス：admin@example.com
+- パスワード：password
+
+### 一般ユーザー
+
+- メールアドレス：taro.y@coachtech.com
+- パスワード：password
 
 ## 使用技術（実行環境）
 
@@ -55,7 +74,7 @@ cp .env.example .env
 
 ## ER図
 
-＜ER図の画像をここに貼り付けてください＞
+![alt text](<Untitled (1).png>)
 
 ## URL
 
