@@ -27,34 +27,44 @@ class StampCorrectionRequestController extends Controller
     {
         $stampCorrectionRequest = StampCorrectionRequest::with(
             'attendance.user',
-            'attendance.restTimes'
+            'stampCorrectionRestTimes'
         )->find($stampCorrectionRequest);
 
-        $attendance = $stampCorrectionRequest->attendance;
-        $stampCorrectionRequestId = $stampCorrectionRequest->id;
-
-        return view('admin.stamp_correction.detail', compact('attendance', 'stampCorrectionRequestId'));
+        return view('admin.stamp_correction.detail', compact('stampCorrectionRequest'));
 
     }
 
     public function approve($stampCorrectionRequest)
     {
-        $stampCorrectionRequest = StampCorrectionRequest::with('attendance')->find($stampCorrectionRequest);
+        $stampCorrectionRequest = StampCorrectionRequest::with(
+            'attendance',
+            'stampCorrectionRestTimes'
+        )->find($stampCorrectionRequest);
 
         // 勤怠情報を申請内容で更新
         $stampCorrectionRequest->attendance->update([
-            'status' => '承認済み',
+            'check_in'  => $stampCorrectionRequest->check_in,
+            'check_out' => $stampCorrectionRequest->check_out,
+            'remarks'   => $stampCorrectionRequest->remarks,
+            'status'    => '承認済み',
         ]);
+
+        // 休憩情報を更新
+        foreach($stampCorrectionRequest->stampCorrectionRestTimes as $index => $restTime) {
+            $existingRestTime = $stampCorrectionRequest->attendance->restTimes[$index] ?? null;
+            if($existingRestTime) {
+                $existingRestTime->update([
+                    'rest_start' => $restTime->rest_start,
+                    'rest_end'   => $restTime->rest_end,
+                ]);
+            }
+        }
 
         // 申請ステータスを承認済みに更新
         $stampCorrectionRequest->update([
             'status' => '承認済み',
         ]);
 
-        //承認後、画面遷移なし
-       return response()->json([
-        'success' => true,
-        'message' => '承認済み',
-        ]);
-    }
+        return response()->json(['success' => true]);
+        }
 }

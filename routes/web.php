@@ -10,6 +10,9 @@ use App\Http\Controllers\Admin\StampCorrectionRequestController as AdminStampCor
 
 Route::middleware(['auth','verified'])->group(function(){
 Route::get('/attendance',[AttendanceController::class,'index'])->name('attendance.index');
+Route::get('/', function () {
+    return redirect()->route('login');
+});
 Route::post('/attendance/check-in',[AttendanceController::class,'checkIn'])->name('attendance.check-in');
 Route::post('/attendance/check-out',[AttendanceController::class,'checkOut'])->name('attendance.check-out');
 Route::post('/attendance/rest-in',[AttendanceController::class,'restIn'])->name('attendance.rest-in');

@@ -12,7 +12,9 @@ class StampCorrectionRequest extends Model
         'user_id',
         'attendance_id',
         'status',
-        'remarks'
+        'remarks',
+        'check_in',
+        'check_out',
     ];
 
     public function user()
@@ -23,6 +25,11 @@ class StampCorrectionRequest extends Model
     public function attendance()
     {
         return $this->belongsTo(Attendance::class);
+    }
+
+    public function stampCorrectionRestTimes()
+    {
+        return $this->hasMany(StampCorrectionRestTime::class);
     }
 
 }

@@ -1,7 +1,7 @@
-@extends('layouts.admin')
+@extends('layouts.app')
 
 @section('content')
-    <div class="admin-stamp-correction-detail-container">
+    <div class="attendance-detail-container">
 
         <h2>勤怠詳細</h2>
 
@@ -42,41 +42,9 @@
             </tr>
         </table>
 
-        <div class="submit-area">
-            <div id="approve-area">
-                @if ($stampCorrectionRequest->status === '承認済み')
-                    <button type="button" disabled id="approve-btn">承認済み</button>
-                @else
-                    <button type="button" id="approve-btn"
-                        data-url="{{ route('admin.stamp-correction-request.approve', ['stampCorrectionRequest' => $stampCorrectionRequest->id]) }}">
-                        承認
-                    </button>
-                @endif
-            </div>
-        </div>
+        @if ($stampCorrectionRequest->status === '承認待ち')
+            <p class="pending-message">*承認待ちのため修正はできません。</p>
+        @endif
 
     </div>
-
-    <script>
-        const btn = document.getElementById('approve-btn');
-        if (btn && btn.dataset.url) {
-            btn.addEventListener('click', function() {
-                fetch(this.dataset.url, {
-                        method: 'POST',
-                        headers: {
-                            'X-CSRF-TOKEN': '{{ csrf_token() }}',
-                            'Content-Type': 'application/json',
-                            'Accept': 'application/json',
-                        },
-                    })
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data.success) {
-                            btn.textContent = '承認済み';
-                            btn.disabled = true;
-                        }
-                    });
-            });
-        }
-    </script>
 @endsection
